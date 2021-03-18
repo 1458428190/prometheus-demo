@@ -45,7 +45,7 @@
 
   <u>在grafana添加数据源，选择clickhouse. 如果使用的都是默认的配置，填写url和user就好了，url:(ip:8123),user:default</u>
 
-  ![image-20210318164357956](https://github.com/1458428190/prometheus-demo/images/image-20210318164357956.png)
+  ![image-20210318164357956](https://raw.githubusercontent.com/1458428190/prometheus-demo/main/images/image-20210318164357956.png)
 
   ## 2. prometheus使用案例
 
@@ -127,7 +127,7 @@
   2. 在grafana中import模板，并选择prometheus数据源，就生成了一个很好看的dashboard了
   ```
 
-  ![image-20210318170022275](https://github.com/1458428190/prometheus-demo/images/image-20210318170022275.png)
+  ![image-20210318170022275](https://raw.githubusercontent.com/1458428190/prometheus-demo/main/images/image-20210318170022275.png)
 
   #### 案例2：应用监控 clickhouse-exporter
 
@@ -148,7 +148,7 @@
 
   - grafana官网中找个好看的dashboard模板，id：882
 
-  ![image-20210318170512727](https://github.com/1458428190/prometheus-demo/images/image-20210318170512727.png)
+  ![image-20210318170512727](https://raw.githubusercontent.com/1458428190/prometheus-demo/main/images/image-20210318170512727.png)
 
   #### 案例3：监控SpringBoot 基于eureka实现
 
@@ -217,7 +217,7 @@
 
   - grafana官网中找个好看的dashboard模板，比如id：11378
 
-    ![image-20210318171821693](https://github.com/1458428190/prometheus-demo/images/image-20210318171821693.png)
+    ![image-20210318171821693](https://raw.githubusercontent.com/1458428190/prometheus-demo/main/images/image-20210318171821693.png)
 
   ## 3. prometheus搭配alertmanager使用案例
 
@@ -333,7 +333,7 @@
 
   - grafana添加视图
 
-  ![image-20210318173825123](https://github.com/1458428190/prometheus-demo/images/image-20210318173825123.png)
+  ![image-20210318173825123](https://raw.githubusercontent.com/1458428190/prometheus-demo/main/images/image-20210318173825123.png)
 
   - 配置告警规则，作用看注释~
 
@@ -433,7 +433,7 @@
 
   - alertmanager报警示例。可以在后台展示（这个后台还可以配置静默规则）
 
-  ![image-20210318174250098](https://github.com/1458428190/prometheus-demo/images/image-20210318174250098.png)
+  ![image-20210318174250098](https://raw.githubusercontent.com/1458428190/prometheus-demo/main/images/image-20210318174250098.png)
 
 ## 比较不好的体验：
 
