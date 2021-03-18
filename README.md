@@ -361,7 +361,7 @@
         severity: critical
         type: automkt
       annotations:
-  			summary: "vip自动化营销近5分钟内平均触发数低于20000，severity: critical"
+  		summary: "vip自动化营销近5分钟内平均触发数低于20000，severity: critical"
         description: "vip自动化营销近5分钟内平均触发数 = {{ $value }})"
    	- alert: mkt-alert
       # promQL
@@ -373,7 +373,7 @@
         severity: slight
         type: automkt
       annotations:
-  			summary: "plus自动化营销数据异常，severity: slight"
+  		summary: "plus自动化营销数据异常，severity: slight"
         description: "触发数：{{ $value }})"
   ```
 
