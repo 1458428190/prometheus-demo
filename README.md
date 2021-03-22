@@ -434,7 +434,30 @@
   - alertmanager报警示例。可以在后台展示（这个后台还可以配置静默规则）
 
   ![image-20210318174250098](https://raw.githubusercontent.com/1458428190/prometheus-demo/main/images/image-20210318174250098.png)
-
+  
+  - pushgateway的使用案例
+  
+  ```xml
+  <!-- 引入包 -->
+  <dependency>
+      <groupId>io.prometheus</groupId>
+      <artifactId>simpleclient_pushgateway</artifactId>
+      <version>0.10.0</version>
+  </dependency>
+  ```
+  
+  ```java
+  String url = "10.224.192.113:9091";
+  CollectorRegistry registry = new CollectorRegistry();
+  Gauge guage = Gauge.build("my_custom_metric", "This is my custom metric.").create();
+  guage.set(23.12);
+  guage.register(registry);
+  PushGateway pg = new PushGateway(url);
+  Map<String, String> groupingKey = new HashMap<String, String>();
+  groupingKey.put("instance", "my_instance");
+  pg.pushAdd(registry, "my_job", groupingKey);
+  ```
+  
 ## 比较不好的体验：
 
 	- prometheus.rule.yml和alertmanager.yml配置有点麻烦
