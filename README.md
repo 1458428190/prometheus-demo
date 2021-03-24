@@ -343,7 +343,7 @@ Metrics.gauge("mp.mkt.automkt.cnt.gauge", ImmutableList.of(new ImmutableTag("job
   # 营销系统业务告警
   - alert: mkt-alert
     # promQL vip自动化营销触发数，过去5分钟平均值小于2w
-    expr: avg(mp_mkt_automkt_cnt_gauge{jobType="vipUserMktJob"} offset 5m) < 25000
+    expr: avg(mp_mkt_automkt_cnt_gauge{jobType="vipUserMktJob"}[5m]) < 25000
     # 添加告警标签
     labels:
       severity: slight
@@ -353,7 +353,7 @@ Metrics.gauge("mp.mkt.automkt.cnt.gauge", ImmutableList.of(new ImmutableTag("job
       description: "vip自动化营销近5分钟内平均触发数 = {{ $value }})"
   - alert: mkt-alert
     # promQL
-    expr: avg(mp_mkt_automkt_cnt_gauge{jobType="vipUserMktJob"} offset 5m) < 20000
+    expr: avg(mp_mkt_automkt_cnt_gauge{jobType="vipUserMktJob"}[5m]) < 20000
     # 持续1分钟
     for: 1m
     # 标签
@@ -365,7 +365,7 @@ Metrics.gauge("mp.mkt.automkt.cnt.gauge", ImmutableList.of(new ImmutableTag("job
       description: "vip自动化营销近5分钟内平均触发数 = {{ $value }})"
  	- alert: mkt-alert
     # promQL
-    expr: avg(mp_mkt_automkt_cnt_gauge{jobType="dwUserMktJob"} offset 5m) < 200000
+    expr: avg(mp_mkt_automkt_cnt_gauge{jobType="dwUserMktJob"}[5m]) < 200000
     # 持续1分钟
     for: 1m
     # 标签
