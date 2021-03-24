@@ -342,9 +342,7 @@
     - alert: mkt-alert
       # promQL vip自动化营销触发数，过去5分钟平均值小于2w
       expr: avg(mp_mkt_automkt_cnt_gauge{jobType="vipUserMktJob"} offset 5m) < 25000
-      # 持续1分钟
-      for: 1m
-      # 标签
+      # 添加告警标签
       labels:
         severity: slight
         type: automkt
@@ -387,8 +385,8 @@
     smtp_auth_password: 'FAMAPDNAOUPJMMOV'
     smtp_require_tls: false
   route:                                          #每个输入警报进入根路由
-    receiver: 'team-b'                                            #根路由不得包含任何匹配项，因为它是所有警报的入口点
-    group_by: ['alertname', 'instance']           #将传入警报分组的标签。例如，将alertname和instance值相同的分为同一个组
+    receiver: 'team-b'                            #根路由不得包含任何匹配项，因为它是所有警报的入口点
+    group_by: ['alertname', 'instance']           #将传入警报分组的标签。将alertname和instance值相同的分为同一个组
     group_wait: 30s                               #当传入的警报创建了一组新的警报时，请至少等待多少秒发送初始通知
     group_interval: 5m                            #发送第一个通知时，请等待多少分钟发送一批已开始为该组触发的新警报
     repeat_interval: 3h                           #如果警报已成功发送，请等待多少小时以重新发送警报
@@ -434,9 +432,9 @@
   - alertmanager报警示例。可以在后台展示（这个后台还可以配置静默规则）
 
   ![image-20210318174250098](https://raw.githubusercontent.com/1458428190/prometheus-demo/main/images/image-20210318174250098.png)
-  
+
   - pushgateway的使用案例
-  
+
   ```xml
   <!-- 引入包 -->
   <dependency>
@@ -445,7 +443,7 @@
       <version>0.10.0</version>
   </dependency>
   ```
-  
+
   ```java
   String url = "10.224.192.113:9091";
   CollectorRegistry registry = new CollectorRegistry();
@@ -456,8 +454,26 @@
   Map<String, String> groupingKey = new HashMap<String, String>();
   groupingKey.put("instance", "my_instance");
   pg.pushAdd(registry, "my_job", groupingKey);
-  ```
   
+  
+  String url = "10.224.192.113:9091";
+  CollectorRegistry registry = new CollectorRegistry();
+  Gauge guage = Gauge.build("my_custom_metric", "This is my custom metric.").labelNames("app", "date").create();
+  String date = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss").format(new Date());
+  guage.labels("my-pushgateway-test-0", date).set(25);
+  guage.labels("my-pushgateway-test-1", date).dec();
+  guage.labels("my-pushgateway-test-2", date).dec(2);
+  guage.labels("my-pushgateway-test-3", date).inc();
+  guage.labels("my-pushgateway-test-4", date).inc(5);
+  guage.register(registry);
+  PushGateway pg = new PushGateway(url);
+  Map<String, String> groupingKey = new HashMap<>();
+  groupingKey.put("instance", "my_instance");
+  pg.pushAdd(registry, "my_job", groupingKey);
+  ```
+
+  
+
 ## 比较不好的体验：
 
 	- prometheus.rule.yml和alertmanager.yml配置有点麻烦
