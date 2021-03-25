@@ -327,7 +327,7 @@ alerting:
 
 ```java
 // 上报瞬时指标，这段代码可以周期运行。等待prometheus server拉取。
-Metrics.gauge("mp.mkt.automkt.cnt.gauge", ImmutableList.of(new ImmutableTag("jobType", "vipUserMktJob")), 									
+Metrics.gauge("mp.mkt.automkt.cnt.gauge", ImmutableList.of(new ImmutableTag("jobType", "vipUserMktJob")), 	
               RandomUtil.randomLong(19000, 25000)));
 Metrics.gauge("mp.mkt.automkt.cnt.gauge", ImmutableList.of(new ImmutableTag("jobType", "dwUserMktJob")), 
               RandomUtil.randomLong(19000, 25000)));
@@ -389,24 +389,25 @@ global:
 route:                                          #每个输入警报进入根路由
   receiver: 'team-b'                            #根路由不得包含任何匹配项，因为它是所有警报的入口点
   group_by: ['alertname', 'instance']           #将传入警报分组的标签。将alertname和instance值相同的分为同一个组
-  group_wait: 30s                               #当传入的警报创建了一组新的警报时，请至少等待多少秒发送初始通知
-  group_interval: 5m                            #发送第一个通知时，请等待多少分钟发送一批已开始为该组触发的新警报
+  group_wait: 30s                               #等待30秒发送初始通知，用于聚合同一个分组的报警信息
+  group_interval: 5m                            #分组执行报警逻辑的时间周期
   repeat_interval: 3h                           #如果警报已成功发送，请等待多少小时以重新发送警报
   routes:                                       #子路由，父路由的所有属性都会被子路由继承
-  - match_re:                                   #此路由在警报标签上执行正则表达式匹配，以捕获与服务列表相关的警报
+  - match_re:                                   #正则匹配 标签severity=slight或者critical
      severity: ^(slight|critical)$
     receiver: team-a
-    routes:                                     #服务有严重警报，任何警报子路径不匹配，即通过父路由配置直接发送给收件人
+    routes:                                     #严重警报，通知给team-b
     - match:
         severity: critical
       receiver: team-b
-      routes:
+      routes:																		#自动化营销的严重报警，通知给team-automkt
       - match:
           alertname: mkt-alert
           type: automkt
         receiver: team-automkt
 
-#如果另一个警报正在触发，则禁止规则允许将一组警报静音，如果同一警报已经严重，我们将使用此选项禁用任何警告级别的通知
+#同一个alertname，如果已经出过严重的报警，就屏蔽轻微的报警
+#抑制规则
 inhibit_rules:
 - source_match:
     severity: 'critical'
@@ -414,6 +415,7 @@ inhibit_rules:
     severity: 'slight'
   equal: ['alertname']
 #如果警报名称相同，则应用抑制，如果源警报和目标警报中均缺少“equal”中列出的所有标签名称，则将应用禁止规则！
+
 receivers:
 - name: 'team-a'
   email_configs:
@@ -427,7 +429,7 @@ receivers:
   - to: 'lcf_test03@163.com,lcf_test04@163.com'
   # 配置钩子，扩展通知方式
   # webhook_configs:
-  # - url: 'http://prometheus-webhook-dingtalk.kube-ops.svc.cluster.local:8060/dingtalk/webhook1/send'
+  # - url: '短信 popo'
   #   send_resolved: true
 ```
 
